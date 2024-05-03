@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Online Compiler</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
@@ -44,7 +44,7 @@
             </div>
             <div class="h-50">
                 <label for="Output" class="text-light mb-2">Output</label>
-                <textarea type="text" id="output" class="form-control h-75" aria-label="Last name"></textarea>
+                <textarea type="text" id="output" class="form-control h-75" aria-label="Last name" readonly></textarea>
             </div>   
         </div>
     </div>
@@ -57,26 +57,29 @@
         lineNumbers: true,
         autoCloseBrackets: true,
     });
-    var input = document.getElementById("input"); // Correção do ID para corresponder ao HTML
-    var output = document.getElementById("output"); // Correção do ID para corresponder ao HTML
+
+    var input = document.getElementById("input");
+    var output = document.getElementById("output");
     var run = document.getElementById("run");
     editor.setSize("700px", "500px");
     var option = document.getElementById("inlineFormSelectPref")
+
     option.addEventListener("change", function(){
         if(option.value == "Java"){
             editor.setOption("mode", "text/x-java")
         }
         else if(option.value == "Python"){
-            editor.setOption("mode", "text/x-python") // Correção do valor da opção para corresponder ao HTML
+            editor.setOption("mode", "text/x-python")
         }
         else{
             editor.setOption("mode", "text/x-c++src")
         }
     })
+
     run.addEventListener("click", async function(){ 
         var code={
             code: editor.getValue(),
-            input: input.value, // Correção do nome do elemento para corresponder ao HTML
+            input: input.value,
             lang: option.value
         }
         try {
@@ -88,7 +91,7 @@
                 body: JSON.stringify(code)
             });
             var d = await oData.json();
-            output.value = d.output; // Correção do nome do elemento para corresponder ao HTML
+            output.value = d.output;
         } catch (error) {
             console.error("Error:", error);
         }
