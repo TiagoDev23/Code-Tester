@@ -16,86 +16,85 @@
     <link rel="stylesheet" href="codemirror-5.65.16/theme/dracula.css">
     <script src="codemirror-5.65.16/addon/edit/closebrackets.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="row m-3">
-        <div class="col">
-            <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
-                <div class="col-12 w-25">
-                    <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
-                    <select class="form-select" id="inlineFormSelectPref">
-                      <option selected>Choose...</option>
-                      <option value="Java">Java</option>
-                      <option value="Cpp">Cpp</option>
-                      <option value="Python">Python</option>
-                    </select>
-                  </div>
-                  <div>
-                    <button type="button" class="btn btn-success">Run</button>
-                    <button type="button" id="run" class="btn btn-success"><i class="bi bi-play-fill"></i></button>
-                  </div>
+    <div class="container mt-5 container-custom">
+        <div class="row">
+            <div class="col">
+                <div class="d-flex justify-content-between mb-3 header-custom">
+                    <div class="w-25">
+                        <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                        <select class="form-select" id="inlineFormSelectPref">
+                            <option selected>Choose...</option>
+                            <option value="Java">Java</option>
+                            <option value="Cpp">Cpp</option>
+                            <option value="Python">Python</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" id="run" class="btn btn-success"><i class="bi bi-play-fill"></i> Run</button>
+                    </div>
+                </div>
+                <textarea id="editor"></textarea>
             </div>
-            <textarea type="text" class="form-control" id="editor" aria-label="First name" aria-label="First name"></textarea>
-        </div>
-        <div class="col d-flex flex-column rounded bg-dark px-4">
-            <div class="h-50">
-                <label for="Input" class="text-light mt-4 mb-2">Input</label>
-                <textarea type="text" id="input" class="form-control h-75" aria-label="Last name"></textarea>
+            <div class="col d-flex flex-column">
+                <div class="h-50 mb-3">
+                    <label for="input">Input</label>
+                    <textarea id="input" class="form-control h-75"></textarea>
+                </div>
+                <div class="h-50">
+                    <label for="output">Output</label>
+                    <textarea id="output" class="form-control h-75" readonly></textarea>
+                </div>   
             </div>
-            <div class="h-50">
-                <label for="Output" class="text-light mb-2">Output</label>
-                <textarea type="text" id="output" class="form-control h-75" aria-label="Last name" readonly></textarea>
-            </div>   
         </div>
     </div>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+            mode: "python",
+            theme: "dracula",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+        });
+
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        var run = document.getElementById("run");
+        editor.setSize("100%", "500px");
+        var option = document.getElementById("inlineFormSelectPref");
+
+        option.addEventListener("change", function() {
+            if (option.value == "Java") {
+                editor.setOption("mode", "text/x-java");
+            } else if (option.value == "Python") {
+                editor.setOption("mode", "text/x-python");
+            } else {
+                editor.setOption("mode", "text/x-c++src");
+            }
+        });
+
+        run.addEventListener("click", async function() {
+            var code = {
+                code: editor.getValue(),
+                input: input.value,
+                lang: option.value
+            }
+            try {
+                var oData = await fetch("http://localhost:5500/compile", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(code)
+                });
+                var d = await oData.json();
+                output.value = d.output;
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+    </script>
 </body>
-
-<script>
-    var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-        mode: "python",
-        theme: "dracula",
-        lineNumbers: true,
-        autoCloseBrackets: true,
-    });
-
-    var input = document.getElementById("input");
-    var output = document.getElementById("output");
-    var run = document.getElementById("run");
-    editor.setSize("700px", "500px");
-    var option = document.getElementById("inlineFormSelectPref")
-
-    option.addEventListener("change", function(){
-        if(option.value == "Java"){
-            editor.setOption("mode", "text/x-java")
-        }
-        else if(option.value == "Python"){
-            editor.setOption("mode", "text/x-python")
-        }
-        else{
-            editor.setOption("mode", "text/x-c++src")
-        }
-    })
-
-    run.addEventListener("click", async function(){ 
-        var code={
-            code: editor.getValue(),
-            input: input.value,
-            lang: option.value
-        }
-        try {
-            var oData = await fetch("http://localhost:8000/compile", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(code)
-            });
-            var d = await oData.json();
-            output.value = d.output;
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    })
-</script>
-
 </html>

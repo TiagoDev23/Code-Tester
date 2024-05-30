@@ -1,10 +1,14 @@
 const express = require("express");
 const { static } = require("express");
+const cors = require("cors"); // Importe o pacote CORS
 const app = express();
 const { json } = require("body-parser");
 const compiler=require("compilex")
 const options = {stats:true}
 compiler.init(options)
+
+// Use o middleware CORS
+app.use(cors());
 
 // Define o middleware para analisar o corpo da solicitação como JSON
 app.use(json());
@@ -99,6 +103,6 @@ app.post("/compile", function(req, res){
 })
 
 // Inicia o servidor na porta 8000
-app.listen(8000, function() {
-    console.log("Servidor está escutando na porta 8000");
+app.listen(5500, function() {
+    console.log("Servidor está escutando na porta 5500");
 });
