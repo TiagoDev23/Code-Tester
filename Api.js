@@ -1,108 +1,95 @@
 const express = require("express");
 const { static } = require("express");
-const cors = require("cors"); // Importe o pacote CORS
 const app = express();
 const { json } = require("body-parser");
-const compiler=require("compilex")
-const options = {stats:true}
-compiler.init(options)
+const compiler = require("compilex");
+const options = { stats: true };
+compiler.init(options);
 
-// Use o middleware CORS
-app.use(cors());
+app.use(function(req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    next();
+});
 
-// Define o middleware para analisar o corpo da solicitação como JSON
 app.use(json());
-
-// Define o middleware para servir arquivos estáticos do CodeMirror
 app.use("/codemirror-5.65.16", static("C:/Users/tiago/OneDrive/Documentos/Compilador/codemirror-5.65.16"));
+app.use(static("C:/Users/tiago/OneDrive/Documentos/Compilador")); // Add this line to serve the styles.css file
 
-// Define o middleware para servir a página HTML
 app.get("/", function(req, res) {
     res.sendFile("C:/Users/tiago/OneDrive/Documentos/Compilador/index.html");
 });
 
-app.post("/compile", function(req, res){  
-    var code = req.body.code 
-    var input = req.body.input
-    var lang = req.body.lang
-    var envData = { OS : "windows"};
-    try{
-        if(lang=="Cpp"){
-            if(!input){
-                var envData = { OS : "windows" , cmd : "g++", options:{timeout:10000}}; // (uses g++ command to compile )
-                //else
-                var envData = { OS : "linux" , cmd : "gcc", options:{timeout:10000} }; // ( uses gcc command to compile )
-                compiler.compileCPP(envData , code , function (data) {
-                    if(data.output){
-                        res.send(data);
-                    }
-                    else{
-                        res.send({output:"error"})
-                    }
-                });
-            } else{
-                //if windows  
-                var envData = { OS : "windows" , cmd : "g++"}; // (uses g++ command to compile )
-                compiler.compileCPPWithInput(envData , code , input , function (data) {
-                    res.send(data);
-                });
-            }
-        }
-        else if(lang=="Java"){
-            if(!input){
-                var envData = { OS : "windows"}; 
-                //else
-                var envData = { OS : "linux" }; // (Support for Linux in Next version)
-                compiler.compileJava( envData , code , function(data){
-                    if(data.output){
-                        res.send(data);
-                    }
-                    else{
-                        res.send({output:"error"})
-                    }
-                });
-            }
-            else{
-                //if windows  
-                var envData = { OS : "windows"}; 
-                //else
-                var envData = { OS : "linux" }; // (Support for Linux in Next version)
-                compiler.compileJavaWithInput( envData , code , input ,  function(data){
-                    if(data.output){
-                        res.send(data);
-                    }
-                    else{
-                        res.send({output:"error"})
-                    }
-                });
-            }
-        }
-        else if(lang=="Python"){
-            if(!input){
-            var envData = { OS : "windows"}; 
-            //else
-            var envData = { OS : "linux" }; 
-            compiler.compilePython( envData , code , function(data){
-                res.send(data);
-            });       
-            }
-            else{
-            //if windows  
-            var envData = { OS : "windows"}; 
-            //else
-            var envData = { OS : "linux" }; 
-            compiler.compilePythonWithInput( envData , code , input ,  function(data){
-                res.send(data);        
-            });
-            }
-        }
-    }
-    catch(e){
-        console.log("error")
-    }
-})
+app.post("/compile", async function(req, res) {
+    const { code, lang, testCases } = req.body;
+    const results = [];
 
-// Inicia o servidor na porta 8000
+    for (const testCase of testCases) {
+        const { input, expected } = testCase;
+        const envData = { OS: "windows" };
+
+        try {
+            let result;
+            if (lang === "Cpp") {
+                if (!input) {
+                    result = await new Promise((resolve, reject) => {
+                        compiler.compileCPP(envData, code, function(data) {
+                            if (data.error) reject(data.error);
+                            resolve(data.output);
+                        });
+                    });
+                } else {
+                    result = await new Promise((resolve, reject) => {
+                        compiler.compileCPPWithInput(envData, code, input, function(data) {
+                            if (data.error) reject(data.error);
+                            resolve(data.output);
+                        });
+                    });
+                }
+            } else if (lang === "Java") {
+                if (!input) {
+                    result = await new Promise((resolve, reject) => {
+                        compiler.compileJava(envData, code, function(data) {
+                            if (data.error) reject(data.error);
+                            resolve(data.output);
+                        });
+                    });
+                } else {
+                    result = await new Promise((resolve, reject) => {
+                        compiler.compileJavaWithInput(envData, code, input, function(data) {
+                            if (data.error) reject(data.error);
+                            resolve(data.output);
+                        });
+                    });
+                }
+            } else if (lang === "Python") {
+                if (!input) {
+                    result = await new Promise((resolve, reject) => {
+                        compiler.compilePython(envData, code, function(data) {
+                            if (data.error) reject(data.error);
+                            resolve(data.output);
+                        });
+                    });
+                } else {
+                    result = await new Promise((resolve, reject) => {
+                        compiler.compilePythonWithInput(envData, code, input, function(data) {
+                            if (data.error) reject(data.error);
+                            resolve(data.output);
+                        });
+                    });
+                }
+            }
+            results.push({ input, expected, output: result.trim(), passed: result.trim() === expected.trim() });
+        } catch (error) {
+            console.log(error);
+            results.push({ input, expected, output: error, passed: false });
+        }
+    }
+
+    res.send(results);
+});
+
 app.listen(5500, function() {
-    console.log("Servidor está escutando na porta 5500");
+    console.log("Server is running on port 5500");
 });
