@@ -18,7 +18,7 @@ app.use("/codemirror-5.65.16", static("C:/Users/tiago/OneDrive/Documentos/Compil
 app.use(static("C:/Users/tiago/OneDrive/Documentos/Compilador")); // Add this line to serve the styles.css file
 
 app.get("/", function(req, res) {
-    res.sendFile("C:/Users/tiago/OneDrive/Documentos/Compilador/index.html");
+    res.sendFile("C:/Users/tiago/OneDrive/Documentos/Compilador/editor.html");
 });
 
 app.post("/compile", async function(req, res) {
