@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responder Desafio</title>
+    <link rel="stylesheet" href="C:/Users/tiago/OneDrive/Documentos/Compilador/public/css/challenges.css">
+    <script defer src="C:/Users/tiago/OneDrive/Documentos/Compilador/public/js/submitSolution.js"></script>
+</head>
+<body>
+    <h1>Responder Desafio</h1>
+    <form id="submitSolutionForm">
+        <label for="userId">ID do Usuário:</label>
+        <input type="text" id="userId" name="userId" required><br><br>
+
+        <label for="challengeId">ID do Desafio:</label>
+        <input type="text" id="challengeId" name="challengeId" required><br><br>
+
+        <label for="code">Código:</label>
+        <textarea id="code" name="code" required></textarea><br><br>
+
+        <label for="language">Linguagem:</label>
+        <select id="language" name="language" required>
+            <option value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="Cpp">C++</option>
+        </select><br><br>
+
+        <label for="testCases">Casos de Teste (JSON):</label>
+        <textarea id="testCases" name="testCases" required></textarea><br><br>
+
+        <button type="submit">Submeter Solução</button>
+    </form>
+</body>
+</html>

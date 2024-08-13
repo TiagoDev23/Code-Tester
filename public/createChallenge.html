@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Desafio</title>
+    <link rel="stylesheet" href="C:/Users/tiago/OneDrive/Documentos/Compilador/public/css/challenges.css">
+    <script defer src="C:/Users/tiago/OneDrive/Documentos/Compilador/public/js/createChallenge.js"></script>
+</head>
+<body>
+    <h1>Criar Novo Desafio</h1>
+    <form id="createChallengeForm">
+        <label for="title">Título:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">Descrição:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="inputDescription">Descrição da Entrada:</label>
+        <textarea id="inputDescription" name="inputDescription" required></textarea><br><br>
+
+        <label for="outputDescription">Descrição da Saída:</label>
+        <textarea id="outputDescription" name="outputDescription" required></textarea><br><br>
+
+        <label for="testCases">Casos de Teste (JSON):</label>
+        <textarea id="testCases" name="testCases" required></textarea><br><br>
+
+        <button type="submit">Criar Desafio</button>
+    </form>
+</body>
+</html>
