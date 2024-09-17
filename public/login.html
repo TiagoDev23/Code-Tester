@@ -18,47 +18,54 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="password" placeholder="Digite sua senha" required>
+                    <input type="password" class="form-control" id="password" placeholder="Digite sua senha (mínimo 6 caracteres)" required minlength="6">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
             </form>
             <div id="error-message" class="text-danger mt-3"></div>
-            <div class="login-options mt-3">
-                <a href="#" class="text-decoration-none">Esqueceu a senha?</a>
-                <p class="mt-2">Novo por aqui? <a href="register.html" class="text-decoration-none">Criar uma conta</a></p>
+
+            <!-- Adicionando link para registro -->
+            <div class="mt-3">
+                <p>Não tem uma conta? <a href="register.html" class="text-decoration-none">Registre-se aqui</a></p>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById("login-form").addEventListener("submit", async function(event) {
-            event.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+    document.getElementById("login-form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-            try {
-                const response = await fetch("http://localhost:3000/auth/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email, password }),
-                    mode: 'cors' // Garante que o CORS está ativado
-                });
+        if (password.length < 6) {
+            document.getElementById("error-message").textContent = "A senha deve ter pelo menos 6 caracteres.";
+            return;
+        }
 
-                const result = await response.json();
+        try {
+            const response = await fetch("http://localhost:3000/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-                if (response.ok) {
-                    localStorage.setItem("token", result.token);
-                    window.location.href = "C:/Users/tiago/OneDrive/Documentos/Compilador/public/dashboard.html";
-                } else {
-                    document.getElementById("error-message").textContent = result.msg;
-                }
-            } catch (error) {
-                console.error("Erro:", error);
-                document.getElementById("error-message").textContent = "Ocorreu um erro ao tentar fazer login.";
+            const result = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("token", result.token);  // Armazena o token no localStorage
+                localStorage.setItem("userId", result.userId);  // Armazena o userId no localStorage
+                alert('Login realizado com sucesso!');
+                window.location.href = "home.html";
+            } else {
+                document.getElementById("error-message").textContent = result.msg;
             }
-        });
+        } catch (error) {
+            console.error("Erro ao realizar o login:", error);
+            document.getElementById("error-message").textContent = "Erro ao realizar o login.";
+        }
+    });
     </script>
 </body>
 </html>

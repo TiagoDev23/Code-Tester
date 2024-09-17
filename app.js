@@ -27,10 +27,13 @@ const User = require('./models/User');
 // Importar as rotas
 const challengeRoutes = require('./routes/challenges');
 const submissionRoutes = require('./routes/submissions');
+const rankingRoutes = require('./routes/ranking');
 
 // Middleware para as rotas de desafios e submissões
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/submissions', submissionRoutes);
+app.use('/api', rankingRoutes);
+
 
 // Rota pública
 app.get('/', (req, res) => {
@@ -106,24 +109,35 @@ app.post('/auth/register', async (req, res) => {
 app.post("/auth/login", async (req, res) => {
     const { email, password } = req.body;
 
+    // Verificação de email e senha
     if (!email || !password) {
         return res.status(422).json({ msg: 'O email e a senha são obrigatórios' });
     }
 
+    // Busca o usuário no banco de dados
     const user = await User.findOne({ email: email });
     if (!user) {
         return res.status(404).json({ msg: 'Usuário não encontrado' });
     }
 
+    // Verifica a senha
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
-        return res.status(422).json({ msg: 'Senha inválida' });
+        return res.status(422).json({ msg: 'Senha ou email inválidos' });
     }
 
     try {
-        const secret = process.env.SECRET;
-        const token = jwt.sign({ id: user._id }, secret);
-        res.status(200).json({ msg: 'Autenticação realizada com sucesso', token });
+        const secret = process.env.JWT_SECRET;
+
+        // Gera o token JWT com expiração de 7 dias
+        const token = jwt.sign({ id: user._id }, secret, { expiresIn: '7d' });
+
+        // Retorna o token e o ID do usuário
+        res.status(200).json({
+            msg: 'Autenticação realizada com sucesso',
+            token,
+            userId: user._id  // Inclui o ID do usuário na resposta
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: 'Erro no servidor, tente novamente mais tarde!' });

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Desafios</title>
+    <script>
+        // Função para listar desafios
+        function listarDesafios() {
+            fetch('http://localhost:3000/api/challenges')
+                .then(response => response.json())
+                .then(challenges => {
+                    const lista = document.getElementById('listaDesafios');
+                    lista.innerHTML = '';
+                    challenges.forEach(challenge => {
+                        const li = document.createElement('li');
+                        li.textContent = `${challenge.title} - ${challenge.description}`;
+                        lista.appendChild(li);
+
+                        // Botão para excluir desafio
+                        const excluirBtn = document.createElement('button');
+                        excluirBtn.textContent = 'Excluir';
+                        excluirBtn.onclick = () => excluirDesafio(challenge._id);
+                        li.appendChild(excluirBtn);
+
+                        // Botão para visualizar desafio
+                        const visualizarBtn = document.createElement('button');
+                        visualizarBtn.textContent = 'Visualizar';
+                        visualizarBtn.onclick = () => visualizarDesafio(challenge._id);
+                        li.appendChild(visualizarBtn);
+                    });
+                });
+        }
+
+        // Função para visualizar um desafio
+        function visualizarDesafio(id) {
+            fetch(`http://localhost:3000/api/challenges/${id}`)
+                .then(response => response.json())
+                .then(challenge => {
+                    alert(`Título: ${challenge.title}\nDescrição: ${challenge.description}\nCódigo Quebrado: ${challenge.brokenCode}`);
+                });
+        }
+
+        // Função para excluir um desafio
+        function excluirDesafio(id) {
+            fetch(`http://localhost:3000/api/challenges/delete/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    listarDesafios();
+                });
+        }
+    </script>
+</head>
+<body onload="listarDesafios()">
+
+    <h1>Gerenciar Desafios</h1>
+
+    <!-- Lista de Desafios -->
+    <h2>Desafios Cadastrados</h2>
+    <ul id="listaDesafios"></ul>
+
+</body>
+</html>
