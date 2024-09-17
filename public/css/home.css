@@ -1,0 +1,160 @@
+/* Estilos gerais */
+body, html {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: #333;
+}
+
+.container-fluid {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #343a40;
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link {
+    color: #adb5bd;
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding: 10px 20px;
+    display: block;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #495057;
+    color: #fff;
+    text-decoration: none;
+}
+
+.sidebar .nav-link.active {
+    background-color: #495057;
+    color: #fff;
+}
+
+.sidebar .nav-link:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Logout */
+#logoutNav {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+}
+
+#logoutNav .nav-link {
+    color: #f8d7da;
+    transition: all 0.3s ease;
+}
+
+#logoutNav .nav-link:hover {
+    background-color: #721c24;
+    color: #fff;
+}
+
+/* Main content */
+main {
+    margin-left: 250px;
+    padding: 20px;
+    background-color: #ffffff;
+    height: 100vh;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+main h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #495057;
+    border-bottom: 2px solid #adb5bd;
+    padding-bottom: 10px;
+}
+
+main p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+/* Forms */
+form {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+}
+
+form h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #343a40;
+}
+
+form .form-label {
+    font-size: 14px;
+    color: #495057;
+}
+
+form .form-control {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    margin-bottom: 15px;
+}
+
+form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    main {
+        margin-left: 0;
+        padding: 20px 15px;
+    }
+
+    #logoutNav {
+        position: static;
+    }
+}
