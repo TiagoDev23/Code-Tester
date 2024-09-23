@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcryptjsjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const compiler = require('compilex');
@@ -28,6 +28,7 @@ const User = require('./models/User');
 const challengeRoutes = require('./routes/challenges');
 const submissionRoutes = require('./routes/submissions');
 const rankingRoutes = require('./routes/ranking');
+const bcryptjs = require('bcryptjs');
 
 // Middleware para as rotas de desafios e submissões
 app.use('/api/challenges', challengeRoutes);
@@ -85,8 +86,8 @@ app.post('/auth/register', async (req, res) => {
         }
 
         // Criptografar a senha
-        const salt = await bcrypt.genSalt(12);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const salt = await bcryptjsjs.genSalt(12);
+        const hashedPassword = await bcryptjsjs.hash(password, salt);
 
         // Criar novo usuário
         const newUser = new User({
@@ -118,7 +119,7 @@ app.post("/auth/login", async (req, res) => {
     }
 
     // Verifica a senha
-    const checkPassword = await bcrypt.compare(password, user.password);
+    const checkPassword = await bcryptjs.compare(password, user.password);
     if (!checkPassword) {
         return res.status(422).json({ msg: 'Senha ou email inválidos' });
     }
