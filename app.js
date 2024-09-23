@@ -72,36 +72,33 @@ function checkToken(req, res, next) {
 
 // Registro de usuário
 app.post('/auth/register', async (req, res) => {
-    const { name, email, password, confirmpassword } = req.body;
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-        return res.status(422).json({ msg: 'Todos os campos são obrigatórios' });
+        return res.status(422).json({ msg: 'Por favor, preencha todos os campos.' });
     }
-
-    if (password !== confirmpassword) {
-        return res.status(422).json({ msg: 'As senhas não conferem' });
-    }
-
-    const userExists = await User.findOne({ email: email });
-    if (userExists) {
-        return res.status(422).json({ msg: 'Por favor utilize outro email' });
-    }
-
-    const salt = await bcrypt.genSalt(12);
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    const user = new User({
-        name,
-        email,
-        password: passwordHash,
-    });
 
     try {
-        await user.save();
-        res.status(201).json({ msg: 'Usuário criado com sucesso' });
+        const userExists = await User.findOne({ email: email });
+        if (userExists) {
+            return res.status(422).json({ msg: 'E-mail já registrado.' });
+        }
+
+        // Criptografar a senha
+        const salt = await bcrypt.genSalt(12);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Criar novo usuário
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+        res.status(201).json({ msg: 'Usuário registrado com sucesso!' });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: "O servidor está com problemas, tente novamente mais tarde" });
+        res.status(500).json({ msg: 'Erro no servidor.' });
     }
 });
 
