@@ -1,94 +1,117 @@
+Aqui está o arquivo `README.md` que você pode usar para orientar os usuários na instalação e execução do projeto **Code Tester**:
+
+```md
 # Code Tester
 
-Code Tester é uma **Plataforma de Desafios de Programação** que permite que os usuários criem, respondam e gerenciem desafios de programação. A plataforma oferece uma interface para que os usuários submetam soluções para os desafios e acompanhem suas pontuações.
+Code Tester é uma plataforma web desenvolvida para facilitar o aprendizado de Testes de Software, utilizando elementos de gamificação. Esta plataforma permite que os usuários criem, enviem e resolvam problemas de programação, aplicando técnicas de teste de software em um ambiente prático e interativo.
 
-## Funcionalidades
+## Pré-requisitos
 
-### Usuários
-- **Login e Registro**: Os usuários podem criar contas e realizar login no sistema.
-- **Autenticação JWT**: O sistema utiliza JSON Web Tokens (JWT) para autenticação e autorização dos usuários.
-  
-### Desafios
-- **Criação de Desafios**: Usuários autenticados podem criar novos desafios de programação, especificando título, descrição, código quebrado, solução e dificuldade.
-- **Listagem de Desafios**: Usuários podem visualizar e escolher desafios que ainda não resolveram.
-- **Resolução de Desafios**: Usuários podem submeter soluções de código para os desafios selecionados, receber feedback se a solução está correta ou incorreta, e ganhar pontos baseados na dificuldade do desafio.
+Antes de começar, você precisará ter os seguintes softwares instalados:
 
-### Pontuação
-- **Sistema de Pontuação**: Os usuários ganham pontos ao resolverem desafios corretamente, com a pontuação variando de acordo com a dificuldade do desafio.
-- **Ranking**: Os usuários podem ver seu progresso com base nos pontos acumulados.
+- **Node.js** (versão 14.x ou superior)
+- **MongoDB** (versão 4.x ou superior)
+- **Git** (opcional, mas recomendado para clonar o repositório)
 
-### Feedback e Experiência do Usuário
-- **Feedback Imediato**: Após submeter uma solução, o usuário recebe uma notificação indicando se a solução está correta ou incorreta.
-- **Modal de Feedback**: O feedback é mostrado em uma caixa modal, com opções para tentar novamente ou resolver outro desafio.
-- **Desafio Resolvido**: Desafios resolvidos não aparecem mais para o usuário que já os completou.
-- **Sistema de Erro**: Em caso de erro de submissão ou outros problemas, o usuário é informado com uma mensagem clara e a opção de tentar novamente.
+### 1. Instalar o Node.js
 
-## Tecnologias Utilizadas
+Você pode baixar e instalar o Node.js [aqui](https://nodejs.org/). Siga as instruções para seu sistema operacional.
 
-- **Backend**: Node.js com Express.js
-- **Autenticação**: JWT (JSON Web Tokens)
-- **Banco de Dados**: MongoDB (Mongoose para ORM)
-- **Frontend**: HTML, CSS (Bootstrap) e JavaScript
-- **Editor de Código**: CodeMirror para uma experiência de edição de código rica e interativa
+### 2. Instalar o MongoDB
+
+Siga as instruções para instalar o MongoDB [aqui](https://www.mongodb.com/try/download/community). Após a instalação, execute o MongoDB localmente em sua máquina (a porta padrão é `27017`).
 
 ## Instalação
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/nome-do-repositorio.git
-   ```
-   
-2. Navegue até a pasta do projeto:
-   ```bash
-   cd nome-do-repositorio
-   ```
+### 1. Clonando o repositório
 
-3. Instale as dependências:
-   ```bash
-   npm install
-   ```
+Clone o repositório do Code Tester para sua máquina:
 
-4. Configure as variáveis de ambiente. Crie um arquivo `.env` com as seguintes variáveis:
-   ```bash
-   PORT=3000
-   MONGO_URI=seu_mongodb_uri
-   JWT_SECRET=seu_segredo_jwt
-   ```
+```bash
+git clone https://github.com/seu-usuario/code-tester.git
+```
 
-5. Inicie o servidor:
-   ```bash
-   npm start
-   ```
+### 2. Instalar dependências
 
-6. Acesse o sistema em [http://localhost:3000](http://localhost:3000).
+Dentro do diretório do projeto, execute o seguinte comando para instalar as dependências necessárias:
 
-## Rotas Principais
+```bash
+cd code-tester
+npm install
+```
 
-### Autenticação
+Isso instalará todas as dependências listadas no arquivo `package.json`, como Express.js, Mongoose, CodeMirror, etc.
 
-- **POST /auth/register**: Registrar um novo usuário.
-- **POST /auth/login**: Realizar login de um usuário.
+### 3. Configurar as variáveis de ambiente
 
-### Desafios
+Crie um arquivo `.env` na raiz do projeto com as seguintes configurações:
 
-- **GET /api/challenges**: Listar todos os desafios.
-- **POST /api/challenges/create**: Criar um novo desafio (usuário autenticado).
-- **POST /api/challenges/submit**: Submeter a solução de um desafio (usuário autenticado).
-- **GET /api/challenges/available**: Listar desafios que o usuário ainda não resolveu (usuário autenticado).
+```env
+# Conexão com o MongoDB
+MONGODB_URI=mongodb://localhost:27017/code-tester
 
-### Submissões
+# JWT Secret para autenticação
+JWT_SECRET=sua-chave-secreta
 
-- **POST /api/submissions/submit**: Submeter solução para um desafio (usuário autenticado).
-- **GET /api/submissions/available**: Listar desafios que o usuário não resolveu (usuário autenticado).
+# Porta onde a aplicação rodará
+PORT=3000
+```
 
-## Autor
+### 4. Iniciando o servidor
 
-**Tiago Amaro Nunes**
+Depois de instalar as dependências e configurar o MongoDB, você pode iniciar o servidor com o seguinte comando:
+
+```bash
+npm start
+```
+
+O servidor será executado no endereço `http://localhost:3000`.
+
+### 5. Inicializar o MongoDB (opcional)
+
+Se desejar popular o banco de dados com dados iniciais ou configurá-lo para produção, você pode executar scripts específicos. Consulte a documentação do MongoDB para mais detalhes sobre inicialização de coleções.
+
+## Uso
+
+1. Abra o navegador e acesse `http://localhost:3000`.
+2. Crie uma conta ou faça login com um usuário existente.
+3. Navegue até a página de desafios e crie, edite ou resolva desafios.
+4. Receba feedback instantâneo sobre as submissões.
+
+## Testes
+
+Se desejar executar testes para garantir que tudo está funcionando conforme o esperado, use o Jest, que já está configurado no projeto:
+
+```bash
+npm test
+```
+
+Isso rodará todos os testes unitários implementados.
+
+## Tecnologias Utilizadas
+
+- **Node.js**: Plataforma de desenvolvimento do back-end.
+- **Express.js**: Framework de desenvolvimento para a API.
+- **MongoDB**: Banco de dados NoSQL para persistência de dados.
+- **CodeMirror**: Editor de código interativo no front-end.
+- **JWT (JSON Web Tokens)**: Utilizado para autenticação e controle de sessões.
+
+## Funcionalidades
+
+- Criação e resolução de desafios de código.
+- Feedback imediato para submissões.
+- Sistema de pontuação e ranking.
+- Autenticação de usuários via JWT.
+
+## Futuras Melhorias
+
+- Integração com mais tipos de testes de software.
+- Melhorias na interface do usuário.
+- API pública para integração com outras plataformas.
 
 ## Licença
 
-Este projeto é licenciado sob os termos da licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está sob a licença MIT. Para mais detalhes, veja o arquivo LICENSE.
+```
 
----
-
-Esse README agora inclui o nome do autor **Tiago Amaro Nunes** e continua com as informações detalhadas sobre o projeto e suas funcionalidades.
+Esse `README.md` inclui todas as etapas necessárias para instalar, configurar e rodar o **Code Tester**, além de informações sobre como contribuir e possíveis melhorias.
