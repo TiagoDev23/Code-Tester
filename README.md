@@ -75,16 +75,6 @@ Se desejar popular o banco de dados com dados iniciais ou configurá-lo para pro
 3. Navegue até a página de desafios e crie, edite ou resolva desafios.
 4. Receba feedback instantâneo sobre as submissões.
 
-## Testes
-
-Se desejar executar testes para garantir que tudo está funcionando conforme o esperado, use o Jest, que já está configurado no projeto:
-
-```bash
-npm test
-```
-
-Isso rodará todos os testes unitários implementados.
-
 ## Tecnologias Utilizadas
 
 - **Node.js**: Plataforma de desenvolvimento do back-end.
