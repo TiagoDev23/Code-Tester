@@ -1,6 +1,3 @@
-Aqui está o arquivo `README.md` que você pode usar para orientar os usuários na instalação e execução do projeto **Code Tester**:
-
-```md
 # Code Tester
 
 Code Tester é uma plataforma web desenvolvida para facilitar o aprendizado de Testes de Software, utilizando elementos de gamificação. Esta plataforma permite que os usuários criem, enviem e resolvam problemas de programação, aplicando técnicas de teste de software em um ambiente prático e interativo.
